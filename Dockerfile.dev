@@ -1,0 +1,23 @@
+# Dockerfile.dev for Next.js development with Yarn
+# Use official Node.js 18 Alpine image for a lightweight container
+FROM node:18-alpine
+
+# Set working directory inside the container
+WORKDIR /app
+
+# Copy dependency files first for better build caching
+COPY package.json yarn.lock ./
+
+# Install dependencies using Yarn
+RUN yarn install
+
+# Copy the rest of the application code
+COPY . .
+
+COPY .env.local .env.local
+
+# Expose port 3000 for Next.js
+EXPOSE 3000
+
+# Start the development server with hot reloading
+CMD ["yarn", "dev"] 
