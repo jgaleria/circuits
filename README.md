@@ -6,7 +6,13 @@ Circuits for the web is a one-stop shop for fitness facility managers.
 
 ### 1. Initialize Supabase
 
+If you do not already have a Supabase account, you must create one at [supabase.com](https://supabase.com/).
+
 Go to [this Supabase project link](https://supabase.com/dashboard/project/tlnfnyhwjognaflpsnfj) to get your Supabase URL and Anon key. You will need these credentials to set up your environment variables.
+
+### 2. Run the App
+
+When you start the app, you will need to create an account and log in through the app's authentication flow to access its features.
 
 ### Development
 
