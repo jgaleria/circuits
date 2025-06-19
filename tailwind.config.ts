@@ -11,6 +11,11 @@ export default {
   theme: {
     extend: {
       colors: {
+        'circuits-dark-blue': '#395A7F',
+        'circuits-medium-blue': '#6E9FC1',
+        'circuits-light-blue': '#A3CAE9',
+        'circuits-light-grey': '#E9CEEE',
+        'circuits-dark-grey': '#ACACAC',
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
@@ -22,8 +27,8 @@ export default {
           foreground: "hsl(var(--popover-foreground))",
         },
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: '#395A7F',
+          foreground: '#ffffff',
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",

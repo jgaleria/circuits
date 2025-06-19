@@ -1,10 +1,10 @@
-# Circuits Web
+# Circuits
 
 Circuits for the web is a one-stop shop for fitness facility managers.
 
 ## Getting Started
 
-### 1. Initialize Supabase
+### 1. Initialize Circuits
 
 If you do not already have a Supabase account, you must create one at [supabase.com](https://supabase.com/).
 
@@ -21,14 +21,13 @@ When you start the app, you will need to create an account and log in through th
    cp .env.example .env.local
    # Edit .env.local and set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY
    ```
-2. Start the app in development mode:
+2. Install dependencies:
    ```sh
-   docker-compose up --build
+   yarn install
    ```
-3. Visit [http://localhost:3000](http://localhost:3000) in your browser.
-4. To stop the app:
+3. Start the development server:
    ```sh
-   docker-compose down
+   yarn dev
    ```
 
 **Optionally, you can use Yarn commands directly for local development if you have Yarn installed:**
@@ -47,3 +46,7 @@ yarn dev
    ```sh
    docker run -p 3000:3000 --env-file .env.local circuits-web-prod
    ```
+
+### About
+
+Circuits helps you connect your fitness journey. Built with Supabase and Next.js.
