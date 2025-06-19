@@ -12,11 +12,11 @@ const buttonVariants = cva(
         default:
           "bg-circuits-dark-blue text-white shadow hover:bg-circuits-medium-blue",
         destructive:
-          "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+          "bg-circuits-dark-grey text-white shadow-sm hover:bg-red-600",
         outline:
           "border border-circuits-dark-grey bg-circuits-light-grey shadow-sm hover:bg-circuits-light-blue hover:text-circuits-dark-blue",
         secondary:
-          "bg-circuits-medium-blue text-white shadow-sm hover:bg-circuits-dark-blue",
+          "bg-circuits-light-blue text-circuits-dark-blue shadow-sm hover:bg-circuits-medium-blue hover:text-white",
         ghost: "hover:bg-circuits-light-grey hover:text-circuits-dark-blue",
         link: "text-circuits-dark-blue underline-offset-4 hover:underline",
       },

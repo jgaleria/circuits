@@ -14,7 +14,7 @@ export default {
         'circuits-dark-blue': '#395A7F',
         'circuits-medium-blue': '#6E9FC1',
         'circuits-light-blue': '#A3CAE9',
-        'circuits-light-grey': '#E9CEEE',
+        'circuits-light-grey': '#F3F4F6',
         'circuits-dark-grey': '#ACACAC',
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

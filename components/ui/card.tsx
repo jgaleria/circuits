@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
+// The Card background uses 'bg-circuits-light-grey', which is set in tailwind.config.ts to a true light gray (#F3F4F6).
 const Card = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
