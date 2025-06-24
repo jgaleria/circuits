@@ -21,13 +21,13 @@ When you start the app, you will need to create an account and log in through th
    cp .env.example .env.local
    # Edit .env.local and set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY
    ```
-2. Install dependencies:
+2. Build your docker image (this will automatically start your localhost:3000):
    ```sh
-   yarn install
+   docker-compose up --build
    ```
-3. Start the development server:
+3. Stop the development server:
    ```sh
-   yarn dev
+   ctrl c out of the terminal and then docker-compose down
    ```
 
 **Optionally, you can use Yarn commands directly for local development if you have Yarn installed:**
