@@ -1,6 +1,6 @@
 from typing import Dict, Any, Optional
 from app.services.supabase_client import get_supabase_client
-from app.models.schemas import LoginRequest, SignupRequest
+from app.models.schemas import LoginRequest, SignupRequest, PasswordUpdateRequest, ForgotPasswordRequest, ResetPasswordRequest
 import logging
 
 logger = logging.getLogger(__name__)
@@ -82,4 +82,39 @@ async def refresh_token(refresh_token: str) -> Dict[str, Any]:
         }
     except Exception as e:
         logger.error(f"Token refresh error: {e}")
+        raise
+
+async def update_password(user_id: str, data: PasswordUpdateRequest) -> None:
+    """Update the password for an authenticated user"""
+    try:
+        supabase = get_supabase_client()
+        # Supabase requires the user to be authenticated; update_user expects the new password
+        response = supabase.auth.admin.update_user_by_id(user_id, {"password": data.new_password})
+        if response.user is None:
+            raise ValueError("Failed to update password")
+    except Exception as e:
+        logger.error(f"Password update error: {e}")
+        raise
+
+async def forgot_password(data: ForgotPasswordRequest) -> None:
+    """Send a password reset email"""
+    try:
+        supabase = get_supabase_client()
+        response = supabase.auth.reset_password_for_email(data.email)
+        if response is None or getattr(response, 'error', None):
+            raise ValueError("Failed to send password reset email")
+    except Exception as e:
+        logger.error(f"Forgot password error: {e}")
+        raise
+
+async def reset_password(data: ResetPasswordRequest) -> None:
+    """Reset password using a token (from email link)"""
+    try:
+        supabase = get_supabase_client()
+        # This is a placeholder; actual implementation may depend on Supabase SDK
+        response = supabase.auth.update_user({"password": data.new_password}, data.token)
+        if response.user is None:
+            raise ValueError("Failed to reset password")
+    except Exception as e:
+        logger.error(f"Reset password error: {e}")
         raise 

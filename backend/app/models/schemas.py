@@ -42,4 +42,15 @@ class AuthResponse(BaseModel):
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
-    expires_in: int 
+    expires_in: int
+
+class PasswordUpdateRequest(BaseModel):
+    new_password: str
+    old_password: Optional[str] = None
+
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str 

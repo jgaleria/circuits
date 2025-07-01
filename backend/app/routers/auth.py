@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, status, Depends
-from app.models.schemas import LoginRequest, SignupRequest, AuthResponse, TokenResponse
-from app.services.auth_service import authenticate_user, create_user, refresh_token
+from app.models.schemas import LoginRequest, SignupRequest, AuthResponse, TokenResponse, PasswordUpdateRequest, ForgotPasswordRequest, ResetPasswordRequest
+from app.services.auth_service import authenticate_user, create_user, refresh_token, update_password, forgot_password, reset_password
 from app.middleware.auth import get_current_user
 from typing import Dict, Any
 
@@ -78,4 +78,43 @@ async def get_current_user_info(current_user: dict = Depends(get_current_user)):
 @router.post("/logout")
 async def logout():
     """Logout user (client should delete token)"""
-    return {"message": "Logged out successfully"} 
+    return {"message": "Logged out successfully"}
+
+@router.put("/password")
+async def change_password(
+    data: PasswordUpdateRequest,
+    current_user: dict = Depends(get_current_user)
+):
+    """Update password for authenticated user"""
+    try:
+        await update_password(current_user.id, data)
+        return {"message": "Password updated successfully"}
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+
+@router.post("/forgot-password")
+async def forgot_password_route(data: ForgotPasswordRequest):
+    """Send password reset email"""
+    try:
+        await forgot_password(data)
+        return {"message": "Password reset email sent"}
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+
+@router.post("/reset-password")
+async def reset_password_route(data: ResetPasswordRequest):
+    """Reset password using token"""
+    try:
+        await reset_password(data)
+        return {"message": "Password has been reset"}
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        ) 
