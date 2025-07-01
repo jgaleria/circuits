@@ -1,6 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
+from app.services.supabase_client import get_supabase_client
 import os
 
 load_dotenv()
@@ -24,6 +25,28 @@ async def health_check():
         "version": "1.0.0",
         "python_version": "3.11"
     }
+
+@app.get("/test-supabase")
+async def test_supabase_connection():
+    try:
+        supabase = get_supabase_client()
+        # Test 1: Simple connection test
+        response = supabase.table('profiles').select('id').limit(1).execute()
+        # Test 2: Check if we can access auth users (admin operation)
+        auth_response = supabase.auth.admin.list_users()
+        return {
+            "status": "success",
+            "message": "Supabase connection working",
+            "connection": "established",
+            "profiles_table": "accessible",
+            "auth_admin": "accessible",
+            "user_count": len(auth_response.users) if hasattr(auth_response, 'users') and auth_response.users else 0
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, 
+            detail=f"Supabase connection failed: {str(e)}"
+        )
 
 @app.get("/")
 async def root():
