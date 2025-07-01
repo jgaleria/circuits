@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from datetime import datetime
 
 class Profile(BaseModel):
@@ -21,4 +21,25 @@ class User(BaseModel):
 
 class UserResponse(BaseModel):
     users: List[User]
-    count: int 
+    count: int
+
+# Authentication models
+class LoginRequest(BaseModel):
+    email: EmailStr
+    password: str
+
+class SignupRequest(BaseModel):
+    email: EmailStr
+    password: str
+    display_name: Optional[str] = None
+
+class AuthResponse(BaseModel):
+    user: Dict[str, Any]
+    session: Dict[str, Any]
+    access_token: str
+    token_type: str = "bearer"
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    expires_in: int 

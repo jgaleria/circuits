@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from app.services.supabase_client import get_supabase_client
-from app.routers import users  # Import users router
+from app.routers import users, auth  # Import auth router
 import os
 
 load_dotenv()
@@ -20,6 +20,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(users.router)
+app.include_router(auth.router)
 
 @app.get("/health")
 async def health_check():
