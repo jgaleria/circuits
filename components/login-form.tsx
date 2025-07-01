@@ -1,7 +1,6 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -17,6 +16,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ErrorMessage } from "@/components/error-message";
 import { FormInputGroup } from "@/components/form-input-group";
+import { authService } from "@/lib/api/auth-service";
+import { useProfile } from "@/lib/contexts/profile-context";
 
 export function LoginForm({
   className,
@@ -27,23 +28,18 @@ export function LoginForm({
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { reloadProfile } = useProfile();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const supabase = createClient();
     setIsLoading(true);
     setError(null);
-
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (error) throw error;
-      // Update this route to redirect to an authenticated route. The user already has an active session.
+      await authService.login({ email, password });
+      await reloadProfile();
       router.push("/protected");
-    } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+    } catch (error: any) {
+      setError(error?.message || "Login failed");
     } finally {
       setIsLoading(false);
     }

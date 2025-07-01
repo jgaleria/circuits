@@ -1,8 +1,23 @@
-import { updateSession } from "@/lib/supabase/middleware";
-import { type NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  return await updateSession(request);
+  // Check for token in cookies
+  const token = request.cookies.get('access_token')?.value;
+  const isLoggedIn = !!token;
+
+  // Redirect unauthenticated users to login
+  if (
+    request.nextUrl.pathname !== "/" &&
+    !isLoggedIn &&
+    !request.nextUrl.pathname.startsWith("/login") &&
+    !request.nextUrl.pathname.startsWith("/auth")
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/auth/login";
+    return NextResponse.redirect(url);
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {

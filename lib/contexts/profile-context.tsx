@@ -1,9 +1,8 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";
 import type { Profile, ProfileError, ProfileUpdate } from "@/lib/types/profile";
-import { getCurrentUserProfile, updateProfile } from "@/lib/supabase/profiles";
-import { createClient } from "@/lib/supabase/client";
+import { profileService } from "@/lib/api/profile-service";
 
 interface ProfileContextValue {
   profile: Profile | null;
@@ -11,6 +10,7 @@ interface ProfileContextValue {
   error: string | null;
   updateProfileInContext: (updates: ProfileUpdate) => Promise<void>;
   setProfile: (profile: Profile | null) => void;
+  reloadProfile: () => Promise<void>;
 }
 
 const ProfileContext = createContext<ProfileContextValue | undefined>(undefined);
@@ -20,47 +20,22 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    let isMounted = true;
+  const fetchProfile = useCallback(async () => {
     setLoading(true);
-    getCurrentUserProfile().then((result) => {
-      if (!isMounted) return;
-      if ("display_name" in result) {
-        setProfile(result);
-        setError(null);
-      } else {
-        setProfile(null);
-        setError(result.message);
-      }
-      setLoading(false);
-    });
-    return () => {
-      isMounted = false;
-    };
+    try {
+      const result = await profileService.getCurrentProfile();
+      setProfile(result);
+      setError(null);
+    } catch (err: any) {
+      setProfile(null);
+      setError(err.message || "Failed to fetch profile");
+    }
+    setLoading(false);
   }, []);
 
-  // Listen for Supabase auth state changes and update profile context
   useEffect(() => {
-    const supabase = createClient();
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user) {
-        getCurrentUserProfile().then((result) => {
-          if ("display_name" in result) {
-            setProfile(result);
-            setError(null);
-          } else {
-            setProfile(null);
-            setError(result.message);
-          }
-        });
-      } else {
-        setProfile(null);
-      }
-    });
-    return () => {
-      listener?.subscription.unsubscribe();
-    };
-  }, []);
+    fetchProfile();
+  }, [fetchProfile]);
 
   // Optimistic update function
   const updateProfileInContext = async (updates: ProfileUpdate) => {
@@ -68,19 +43,22 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     const prevProfile = { ...profile };
     setProfile({ ...profile, ...updates });
     setLoading(true);
-    const result = await updateProfile(profile.id, updates);
-    if ("display_name" in result) {
+    try {
+      const result = await profileService.updateCurrentProfile(updates);
       setProfile(result);
       setError(null);
-    } else {
+    } catch (err: any) {
       setProfile(prevProfile); // revert
-      setError(result.message);
+      setError(err.message || "Failed to update profile");
     }
     setLoading(false);
   };
 
+  // Expose a reloadProfile method for UI to refresh after login/logout
+  const reloadProfile = fetchProfile;
+
   return (
-    <ProfileContext.Provider value={{ profile, loading, error, updateProfileInContext, setProfile }}>
+    <ProfileContext.Provider value={{ profile, loading, error, updateProfileInContext, setProfile, reloadProfile }}>
       {children}
     </ProfileContext.Provider>
   );
