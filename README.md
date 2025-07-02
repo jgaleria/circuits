@@ -9,15 +9,30 @@ Circuits uses a three-tier architecture:
 - **Backend API**: FastAPI (localhost:8000)
 - **Database & Auth**: Supabase
 
-## Getting Started
+The frontend communicates with the FastAPI backend, which handles all Supabase operations.
 
-### 1. Initialize Circuits
+## Development Setup
+
+### Prerequisites
+- Node.js and npm/yarn
+- Python 3.11
+- Supabase account and project
+
+### 1. Setup FastAPI Backend
+```bash
+cd backend
+python3.11 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+### 2. Initialize Circuits
 
 If you do not already have a Supabase account, you must create one at [supabase.com](https://supabase.com/).
 
 Go to [this Supabase project link](https://supabase.com/dashboard/project/tlnfnyhwjognaflpsnfj) to get your Supabase URL and Service Role Key. You will need these credentials to set up your environment variables.
 
-### 2. Environment Variables
+### 3. Environment Variables
 
 Copy the example environment file and fill in your Supabase and FastAPI credentials:
 ```sh
@@ -25,7 +40,7 @@ cp .env.example .env.local
 # Edit .env.local and set SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, NEXT_PUBLIC_API_URL, and JWT_SECRET_KEY
 ```
 
-### 3. Start the FastAPI Backend
+### 4. Start the FastAPI Backend
 
 ```sh
 cd backend
@@ -35,14 +50,14 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
 
-### 4. Start the Next.js Frontend
+### 5. Start the Next.js Frontend
 
 ```sh
 yarn install
 yarn dev
 ```
 
-### 5. (Optional) Docker Compose
+### 6. (Optional) Docker Compose
 
 You can also use Docker Compose to run both services:
 ```sh
