@@ -47,12 +47,21 @@ NEXT_PUBLIC_API_URL=http://localhost:8000
 ## Repository Structure
 ```
 circuits/
-├── app/                    # Next.js pages
-├── backend/                # FastAPI application
-├── components/             # React components
-├── lib/                    # Utilities and API clients
-├── docker-compose.yml      # Docker configuration
-└── README.md
+├── app/                    # Next.js pages (frontend routes)
+│   └── ...                 # e.g., /profile, /protected, /auth, etc.
+├── backend/                # FastAPI backend (API server)
+│   └── app/
+│       ├── main.py         # FastAPI app entrypoint
+│       ├── routers/        # API route definitions (e.g., users.py, auth.py)
+│       ├── services/       # Business logic (e.g., users_service.py)
+│       ├── models/         # Pydantic schemas (e.g., schemas.py)
+│       └── middleware/     # Auth and other middleware
+├── components/             # Reusable React components (UI, forms, etc.)
+├── lib/                    # Frontend utilities, API clients, contexts, types
+├── docker-compose.yml      # Docker orchestration for frontend/backend
+├── Dockerfile*             # Docker build files
+├── .env*                   # Environment variables
+└── README.md               # Project documentation
 ```
 
 
