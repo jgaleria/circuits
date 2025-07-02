@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from app.services.supabase_client import get_supabase_client
@@ -12,7 +12,12 @@ app = FastAPI(title="Circuits Backend API", version="1.0.0")
 # Configure CORS for Next.js frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=[
+        "http://localhost:3000",
+        "http://frontend:3000",
+        "http://127.0.0.1:3000",
+        "http://0.0.0.0:3000",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -56,4 +61,13 @@ async def test_supabase_connection():
 
 @app.get("/")
 async def root():
-    return {"message": "Circuits FastAPI Backend"} 
+    return {"message": "Circuits FastAPI Backend"}
+
+@app.get("/debug/network")
+async def debug_network(request: Request):
+    return {
+        "client_host": request.client.host if request.client else "unknown",
+        "headers": dict(request.headers),
+        "base_url": str(request.base_url),
+        "url": str(request.url)
+    } 

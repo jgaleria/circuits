@@ -1,17 +1,42 @@
 version: '3.8'
+
 services:
-  nextjs:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - ENVIRONMENT=development
+    volumes:
+      - ./backend:/app
+      - /app/venv
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - circuits-network
+
+  frontend:
     build:
       context: .
-      dockerfile: Dockerfile.dev
-    container_name: nextjs-dev
+      dockerfile: Dockerfile.frontend
     ports:
-      - "3000:3000" # Map host port 3000 to container port 3000
-    volumes:
-      - .:/app # Mount project directory for live code changes
-      - /app/node_modules # Prevents overwriting node_modules in container
+      - "3000:3000"
     environment:
-      - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
-      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
-    env_file:
-      - .env.local # Use .env.local for Next.js local development 
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    command: npm run dev
+    depends_on:
+      - backend
+    networks:
+      - circuits-network
+
+networks:
+  circuits-network:
+    driver: bridge 

@@ -3,6 +3,7 @@ class ApiClient {
   private token: string | null = null;
 
   constructor() {
+    // Use localhost for browser requests (even in Docker)
     this.baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
     if (typeof window !== 'undefined') {
       this.token = localStorage.getItem('access_token');
