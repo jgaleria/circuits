@@ -17,9 +17,10 @@ import { useState } from "react";
 import { authService } from "@/lib/api/auth-service";
 
 export function UpdatePasswordForm({
+  token,
   className,
   ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+}: { token?: string } & React.ComponentPropsWithoutRef<"div">) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +32,11 @@ export function UpdatePasswordForm({
     setError(null);
 
     try {
-      await authService.updatePassword({ new_password: password });
+      if (token) {
+        await authService.resetPassword({ token, new_password: password });
+      } else {
+        await authService.updatePassword({ new_password: password });
+      }
       router.push("/protected");
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");

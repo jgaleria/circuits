@@ -100,7 +100,11 @@ async def forgot_password(data: ForgotPasswordRequest) -> None:
     """Send a password reset email"""
     try:
         supabase = get_supabase_client()
-        response = supabase.auth.reset_password_for_email(data.email)
+        # Add redirectTo so the email link points to the frontend reset page
+        response = supabase.auth.reset_password_for_email(
+            data.email,
+            {"redirectTo": "http://localhost:3000/auth/update-password"}
+        )
         if response is None or getattr(response, 'error', None):
             raise ValueError("Failed to send password reset email")
     except Exception as e:

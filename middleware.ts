@@ -5,13 +5,24 @@ export async function middleware(request: NextRequest) {
   const token = request.cookies.get('access_token')?.value;
   const isLoggedIn = !!token;
 
-  // Redirect unauthenticated users to login
+  // Allow unauthenticated access to password reset and auth pages
+  const publicPaths = [
+    "/",
+    "/auth/login",
+    "/auth/sign-up",
+    "/auth/forgot-password",
+    "/auth/update-password",
+    "/auth/sign-up-success"
+  ];
   if (
-    request.nextUrl.pathname !== "/" &&
-    !isLoggedIn &&
-    !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/auth")
+    publicPaths.includes(request.nextUrl.pathname) ||
+    request.nextUrl.pathname.startsWith("/api")
   ) {
+    return NextResponse.next();
+  }
+
+  // Redirect unauthenticated users to login
+  if (!isLoggedIn) {
     const url = request.nextUrl.clone();
     url.pathname = "/auth/login";
     return NextResponse.redirect(url);

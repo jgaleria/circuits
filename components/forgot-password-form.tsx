@@ -36,7 +36,9 @@ export function ForgotPasswordForm({
       await authService.forgotPassword({ email });
       setSuccess(true);
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+      // Suppress the API error and show a generic message
+      setError(null);
+      setSuccess(false);
     } finally {
       setIsLoading(false);
     }
@@ -77,8 +79,9 @@ export function ForgotPasswordForm({
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  error={error}
+                  error={undefined}
                 />
+                <p className="text-sm text-red-500">Reset Password Not Available Right Now</p>
                 <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading ? "Sending..." : "Send reset email"}
                 </Button>
