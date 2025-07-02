@@ -40,3 +40,34 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+
+# Python virtual environments
+venv/
+backend/venv/
+
+# macOS system files
+.DS_Store
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+
+# Test and cache folders
+.mypy_cache/
+.pytest_cache/
+.hypothesis/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Misc
+*.bak
+*.tmp
+*.orig
