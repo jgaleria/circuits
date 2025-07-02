@@ -2,14 +2,59 @@
 
 Circuits for the web is a one-stop shop for fitness facility managers.
 
-## Architecture
+## Infrastructure
+Next.js Frontend → FastAPI Backend → Supabase Database
 
-Circuits uses a three-tier architecture:
-- **Frontend**: Next.js (localhost:3000)
-- **Backend API**: FastAPI (localhost:8000)
-- **Database & Auth**: Supabase
+- **Frontend**: Next.js (Port 3000)
+- **Backend**: FastAPI (Port 8000)
+- **Database**: Supabase (PostgreSQL + Auth)
 
-The frontend communicates with the FastAPI backend, which handles all Supabase operations.
+## Quick Start
+
+### Using Docker (Recommended)
+```bash
+# Start the application
+docker-compose up --build
+
+# Stop the application
+docker-compose down
+```
+Access the app at http://localhost:3000
+
+### Local Development
+```bash
+# Terminal 1: Start backend
+cd backend
+source venv/bin/activate
+uvicorn app.main:app --reload
+
+# Terminal 2: Start frontend
+npm run dev
+```
+
+## Environment Setup
+Create `.env` in project root:
+```env
+SUPABASE_URL=your_supabase_url
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+JWT_SECRET_KEY=your_jwt_secret
+```
+Create `.env.local` in project root:
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
+
+## Repository Structure
+```
+circuits/
+├── app/                    # Next.js pages
+├── backend/                # FastAPI application
+├── components/             # React components
+├── lib/                    # Utilities and API clients
+├── docker-compose.yml      # Docker configuration
+└── README.md
+```
+
 
 ## Development Setup
 
