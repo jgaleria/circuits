@@ -78,3 +78,15 @@ docker-compose up --build
 ### About
 
 Circuits helps you connect your fitness journey. Built with Supabase, FastAPI, and Next.js.
+
+## Troubleshooting
+
+- **Backend not starting:** Check that you are using Python 3.11 and that your virtual environment is activated (`source venv/bin/activate`).
+- **Frontend auth not working:** Ensure the FastAPI backend is running on port 8000 and accessible from the frontend.
+- **CORS errors:** Make sure `NEXT_PUBLIC_API_URL` in your environment variables matches the actual FastAPI server address (e.g., `http://localhost:8000`).
+
+## Workflow
+
+- The **Next.js frontend** communicates **only** with the FastAPI backend for all authentication and data operations.
+- The **FastAPI backend** is responsible for all communication with Supabase (database and auth).
+- This separation ensures a clean, secure, and scalable architecture for future development.
