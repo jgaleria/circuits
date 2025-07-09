@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, status, Depends, Request, Security
+from fastapi import APIRouter, HTTPException, status, Depends, Request, Security, Response
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, Field, constr
 from typing import Optional, List, Dict, Any, Annotated
@@ -300,9 +300,8 @@ async def delete_session(
             raise HTTPException(status_code=404, detail="Session not found or access denied")
         # Delete session (cascade deletes messages)
         del_resp = supabase.table("chat_sessions").delete().eq("id", session_id).execute()
-        if del_resp.status_code not in (200, 204):
-            raise HTTPException(status_code=500, detail="Failed to delete session")
-        return {"message": "Session deleted"}
+        # Don't check del_resp.status_code; just assume success if no exception
+        return Response(status_code=204)
     except HTTPException:
         raise
     except Exception as e:

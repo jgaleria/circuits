@@ -42,6 +42,10 @@ class ApiClient {
       const errorText = await response.text();
       throw new Error(`API Error: ${response.status} - ${errorText}`);
     }
+    if (response.status === 204) {
+      // No Content
+      return undefined as T;
+    }
     return response.json();
   }
 
