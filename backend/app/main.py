@@ -3,9 +3,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from app.services.supabase_client import get_supabase_client
 from app.routers import users, auth, profiles  # Import profiles router
+from app.routers import chat  # Import chat router
 import os
 
-load_dotenv()
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '.env'))
+print("OPENAI_API_KEY:", os.environ.get("OPENAI_API_KEY"))
 
 app = FastAPI(title="Circuits Backend API", version="1.0.0")
 
@@ -27,6 +29,7 @@ app.add_middleware(
 app.include_router(users.router)
 app.include_router(auth.router)
 app.include_router(profiles.router)
+app.include_router(chat.router)
 
 @app.get("/health")
 async def health_check():
