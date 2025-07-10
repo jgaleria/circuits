@@ -7,6 +7,7 @@ import ChatHeader from "../../components/chat/ChatHeader";
 import ModelSelector from "../../components/chat/ModelSelector";
 import MainLayout from "../../components/main-layout";
 import ChatSidebar from "../../components/chat/ChatSidebar";
+import { AVAILABLE_MODELS, ModelId } from "../../lib/types/chat";
 
 export default function AgentPage() {
   const {
@@ -20,6 +21,7 @@ export default function AgentPage() {
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [newTitle, setNewTitle] = useState("");
+  const [model, setModel] = useState<ModelId>("gpt-3.5-turbo");
 
   // On mount, fetch sessions
   useEffect(() => {
@@ -75,6 +77,14 @@ export default function AgentPage() {
       setActiveSessionId(null);
     }
   }, [sessions, sessionsLoading]);
+
+  // Keep model in sync with the current session
+  useEffect(() => {
+    const currentSession = sessions.find(s => s.id === activeSessionId);
+    if (currentSession && AVAILABLE_MODELS.includes(currentSession.model as ModelId)) {
+      setModel(currentSession.model as ModelId);
+    }
+  }, [activeSessionId, sessions]);
 
   return (
     <MainLayout>
@@ -132,7 +142,12 @@ export default function AgentPage() {
               totalTokens={totalTokens}
               totalCost={totalCost}
               session={session}
-              setSessionModel={setSessionModel}
+              setSessionModel={async (newModel) => {
+                setModel(newModel as ModelId);
+                if (activeSessionId) {
+                  await setSessionModel(newModel as ModelId);
+                }
+              }}
             />
             <div className="flex-1 flex flex-col overflow-hidden">
               {sessions.length === 0 && !sessionsLoading ? (
@@ -152,9 +167,6 @@ export default function AgentPage() {
                   error={chatError}
                   onSend={async ({ message }) => {
                     if (activeSessionId) {
-                      // Use the model from the session list or fallback to session.model
-                      const currentSession = sessions.find(s => s.id === activeSessionId);
-                      const model = currentSession?.model || session?.model || "gpt-3.5-turbo";
                       await sendMessage({ message, session_id: activeSessionId, model });
                       fetchSession();
                     } else {
@@ -162,10 +174,7 @@ export default function AgentPage() {
                     }
                   }}
                   activeSessionId={activeSessionId}
-                  model={(() => {
-                    const currentSession = sessions.find(s => s.id === activeSessionId);
-                    return currentSession?.model || session?.model || "gpt-3.5-turbo";
-                  })()}
+                  model={model}
                   fetchSession={fetchSession}
                 />
               ) : null}
