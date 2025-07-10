@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { getChatSession, sendMessage, updateChatSession } from '../api/chat';
 import { ChatSessionWithMessages, ChatMessage, ChatRequest, ChatResponse, ModelId } from '../types/chat';
 
@@ -22,6 +22,15 @@ export function useChat(sessionId: string) {
       setLoading(false);
     }
   }, [sessionId]);
+
+  // Always fetch session/messages and clear messages when sessionId changes
+  useEffect(() => {
+    setSession(null);
+    setMessages([]);
+    if (sessionId) {
+      fetchSession();
+    }
+  }, [sessionId, fetchSession]);
 
   const setSessionModel = useCallback(async (model: ModelId) => {
     if (!sessionId) return;
