@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import React from "react";
 
 interface ChatInputProps {
   onSend: (message: string) => Promise<void>;
@@ -7,7 +8,12 @@ interface ChatInputProps {
 
 const CHAR_LIMIT = 1000;
 
-export default function ChatInput({ onSend, loading }: ChatInputProps) {
+/**
+ * ChatInput provides a textarea and send button for user input in the chat interface.
+ * @param onSend - Callback to send a message
+ * @param loading - Whether the input is disabled/loading
+ */
+const ChatInput: React.FC<ChatInputProps> = ({ onSend, loading }) => {
   const [value, setValue] = useState("");
   const [error, setError] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -61,4 +67,6 @@ export default function ChatInput({ onSend, loading }: ChatInputProps) {
       </button>
     </div>
   );
-} 
+};
+
+export default React.memo(ChatInput); 

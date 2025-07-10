@@ -2,6 +2,10 @@ import { useState, useCallback, useEffect } from 'react';
 import { getChatSession, sendMessage, updateChatSession } from '../api/chat';
 import { ChatSessionWithMessages, ChatMessage, ChatRequest, ChatResponse, ModelId } from '../types/chat';
 
+/**
+ * useChat manages chat session state, messages, and sending logic for a chat session.
+ * @param sessionId - The chat session ID
+ */
 export function useChat(sessionId: string) {
   const [session, setSession] = useState<ChatSessionWithMessages | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -16,8 +20,9 @@ export function useChat(sessionId: string) {
       const data = await getChatSession(sessionId);
       setSession(data);
       setMessages(data.messages);
-    } catch (err: any) {
-      setError(err.message || 'Failed to fetch session');
+    } catch (err: unknown) {
+      if (err instanceof Error) setError(err.message || 'Failed to fetch session');
+      else setError('Failed to fetch session');
     } finally {
       setLoading(false);
     }
@@ -37,8 +42,9 @@ export function useChat(sessionId: string) {
     try {
       const updated = await updateChatSession(sessionId, { model });
       setSession((prev) => prev ? { ...prev, model: updated.model } : prev);
-    } catch (err: any) {
-      setError(err.message || 'Failed to update model');
+    } catch (err: unknown) {
+      if (err instanceof Error) setError(err.message || 'Failed to update model');
+      else setError('Failed to update model');
     }
   }, [sessionId]);
 
@@ -77,8 +83,9 @@ export function useChat(sessionId: string) {
       // Optionally, re-fetch session for accurate stats/messages
       await fetchSession();
       return res;
-    } catch (err: any) {
-      setError(err.message || 'Failed to send message');
+    } catch (err: unknown) {
+      if (err instanceof Error) setError(err.message || 'Failed to send message');
+      else setError('Failed to send message');
       throw err;
     } finally {
       setSending(false);

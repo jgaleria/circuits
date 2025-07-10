@@ -19,6 +19,10 @@ interface ChatSidebarProps {
   setSidebarOpen?: (open: boolean) => void;
 }
 
+/**
+ * ChatSidebar displays the list of chat sessions and controls for toggling/collapsing the sidebar.
+ * Adds ARIA and keyboard accessibility for improved UX.
+ */
 const ChatSidebar: React.FC<ChatSidebarProps> = ({
   sessions,
   activeSessionId,
@@ -152,9 +156,16 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
           ) : sessions.length === 0 ? (
             <div className="text-zinc-400 text-center mt-8">No chats</div>
           ) : (
-            <ul className="space-y-1">
+            <ul role="listbox" aria-label="Chat sessions">
               {sessions.map((session) => (
-                <li key={session.id} className="group flex items-center">
+                <li
+                  key={session.id}
+                  role="option"
+                  aria-selected={activeSessionId === session.id}
+                  tabIndex={0}
+                  onKeyDown={(e) => { if ((e.key === "Enter" || e.key === " ") && setActiveSessionId) setActiveSessionId(session.id); }}
+                  className="group flex items-center"
+                >
                   <button
                     className={`flex-1 text-left truncate px-3 py-2 rounded-md transition-colors ${
                       session.id === activeSessionId

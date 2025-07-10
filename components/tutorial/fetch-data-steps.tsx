@@ -23,13 +23,19 @@ export default async function Page() {
 }
 `.trim();
 
+// Add Note type for clarity
+interface Note {
+  id: number;
+  title: string;
+}
+
 const client = `'use client'
 
 import { createClient } from '@/utils/supabase/client'
 import { useEffect, useState } from 'react'
 
 export default function Page() {
-  const [notes, setNotes] = useState<any[] | null>(null)
+  const [notes, setNotes] = useState<Note[] | null>(null)
   const supabase = createClient()
 
   useEffect(() => {

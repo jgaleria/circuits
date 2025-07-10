@@ -1,8 +1,18 @@
-import { useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import ChatMessage from "./ChatMessage";
 import ChatInput from "./ChatInput";
 import { ChatMessage as ChatMessageType, ChatSessionWithMessages } from "../../lib/types/chat";
 
+/**
+ * ChatInterface displays the chat messages and input area for a chat session.
+ * @param messages - Array of chat messages
+ * @param loading - Loading state for chat
+ * @param error - Error message if any
+ * @param onSend - Function to send a message
+ * @param activeSessionId - The current session ID
+ * @param model - The selected model
+ * @param fetchSession - Function to refresh session data
+ */
 interface ChatInterfaceProps {
   messages: ChatMessageType[];
   loading: boolean;
@@ -31,8 +41,8 @@ export default function ChatInterface({
   return (
     <div className="flex flex-col h-full w-full bg-background px-2 sm:px-0">
       <div className="flex-1 overflow-y-auto py-4 space-y-2">
-        {messages.map((msg) => (
-          <ChatMessage key={msg.id} message={msg} />
+        {messages.map((msg: ChatMessageType) => (
+          <ChatMessage key={msg.id + msg.created_at} message={msg} />
         ))}
         <div ref={bottomRef} />
         {loading && (

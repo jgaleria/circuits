@@ -1,12 +1,13 @@
 import { ChatMessage as ChatMessageType } from "../../lib/types/chat";
 import { ClipboardCopy } from "lucide-react";
 import { useState } from "react";
+import React from "react";
 
-interface ChatMessageProps {
-  message: ChatMessageType;
-}
-
-export default function ChatMessage({ message }: ChatMessageProps) {
+/**
+ * ChatMessage displays a single chat message bubble.
+ * @param message - The chat message object to display
+ */
+function ChatMessage({ message }: { message: ChatMessageType }) {
   const isUser = message.role === "user";
   const [copied, setCopied] = useState(false);
 
@@ -45,4 +46,6 @@ export default function ChatMessage({ message }: ChatMessageProps) {
       </div>
     </div>
   );
-} 
+}
+
+export default React.memo(ChatMessage); 

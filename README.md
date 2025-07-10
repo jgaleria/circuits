@@ -144,3 +144,15 @@ Circuits helps you connect your fitness journey. Built with Supabase, FastAPI, a
 - The **Next.js frontend** communicates **only** with the FastAPI backend for all authentication and data operations.
 - The **FastAPI backend** is responsible for all communication with Supabase (database and auth).
 - This separation ensures a clean, secure, and scalable architecture for future development.
+
+## Code Style & Best Practices
+
+- All components and functions are written in TypeScript with explicit types and interfaces.
+- Use React functional components and hooks. Prefer React.memo for pure presentational components.
+- Ensure all event handlers and props are explicitly typed.
+- Use semantic HTML and add ARIA attributes for accessibility.
+- Organize imports: React/Next, third-party, then local modules.
+- Use Prettier and ESLint to enforce consistent formatting and code quality.
+- Add JSDoc comments for complex functions and components.
+- Validate and sanitize all user input, especially in forms and API calls.
+- Never expose sensitive data or secrets in client-side code.

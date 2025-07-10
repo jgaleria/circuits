@@ -26,9 +26,10 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
       const result = await profileService.getCurrentProfile();
       setProfile(result);
       setError(null);
-    } catch (err: any) {
+    } catch (err: unknown) {
       setProfile(null);
-      setError(err.message || "Failed to fetch profile");
+      if (err instanceof Error) setError(err.message || "Failed to fetch profile");
+      else setError("Failed to fetch profile");
     }
     setLoading(false);
   }, []);
@@ -47,9 +48,10 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
       const result = await profileService.updateCurrentProfile(updates);
       setProfile(result);
       setError(null);
-    } catch (err: any) {
+    } catch (err: unknown) {
       setProfile(prevProfile); // revert
-      setError(err.message || "Failed to update profile");
+      if (err instanceof Error) setError(err.message || "Failed to update profile");
+      else setError("Failed to update profile");
     }
     setLoading(false);
   };
