@@ -22,6 +22,7 @@ export default function AgentPage() {
   const [showModal, setShowModal] = useState(false);
   const [newTitle, setNewTitle] = useState("");
   const [model, setModel] = useState<ModelId>("gpt-3.5-turbo");
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   // On mount, fetch sessions
   useEffect(() => {
@@ -123,61 +124,77 @@ export default function AgentPage() {
           </form>
         </div>
       )}
-      <div className="flex flex-row h-[calc(100vh-4rem-6rem)] w-full bg-background rounded-xl shadow-lg overflow-hidden">
-        {/* Sidebar (now part of main content, not fixed) */}
-        <ChatSidebar
-          sessions={sessions}
-          activeSessionId={activeSessionId}
-          setActiveSessionId={setActiveSessionId}
-          loading={sessionsLoading}
-          error={sessionsError}
-          onNewChat={openNewChatModal}
-          onDeleteSession={removeSession}
-          layout="embedded"
-        />
-        {/* Main chat area */}
-        <div className="flex-1 flex flex-col items-center justify-center overflow-hidden">
-          <div className="w-full max-w-2xl flex flex-col h-full">
-            <ChatHeader
-              totalTokens={totalTokens}
-              totalCost={totalCost}
-              session={session}
-              setSessionModel={async (newModel) => {
-                setModel(newModel as ModelId);
-                if (activeSessionId) {
-                  await setSessionModel(newModel as ModelId);
-                }
-              }}
+      <div className="relative w-full">
+        <div className="flex flex-row h-[calc(100vh-4rem-6rem)] w-full bg-background rounded-xl shadow-lg overflow-hidden">
+          {/* Sidebar (pushes chat area, not overlay) */}
+          <div className={`transition-all duration-300 ${sidebarOpen ? "w-64" : "w-0"} overflow-hidden`}>
+            <ChatSidebar
+              sessions={sessions}
+              activeSessionId={activeSessionId}
+              setActiveSessionId={setActiveSessionId}
+              loading={sessionsLoading}
+              error={sessionsError}
+              onNewChat={openNewChatModal}
+              onDeleteSession={removeSession}
+              layout="embedded"
+              sidebarOpen={sidebarOpen}
+              setSidebarOpen={setSidebarOpen}
             />
-            <div className="flex-1 flex flex-col overflow-hidden">
-              {sessions.length === 0 && !sessionsLoading ? (
-                <div className="flex flex-1 flex-col items-center justify-center gap-4">
-                  <div className="text-lg text-muted-foreground">No chats yet. Start a new conversation!</div>
-                  <button
-                    className="bg-blue-600 text-white px-6 py-2 rounded-md shadow hover:bg-blue-700 transition"
-                    onClick={openNewChatModal}
-                  >
-                    Start a New Chat
-                  </button>
-                </div>
-              ) : activeSessionId ? (
-                <ChatInterface
-                  messages={messages}
-                  loading={chatLoading || sending}
-                  error={chatError}
-                  onSend={async ({ message }) => {
-                    if (activeSessionId) {
-                      await sendMessage({ message, session_id: activeSessionId, model });
-                      fetchSession();
-                    } else {
-                      alert("No session selected. Please select or create a chat session.");
-                    }
-                  }}
-                  activeSessionId={activeSessionId}
-                  model={model}
-                  fetchSession={fetchSession}
-                />
-              ) : null}
+          </div>
+          {/* Main chat area */}
+          <div className={`flex-1 flex flex-col items-center justify-center overflow-hidden transition-all duration-300 ${sidebarOpen ? "pl-6" : "pl-0"}`}>
+            {/* Floating hamburger button when sidebar is closed */}
+            {!sidebarOpen && (
+              <button
+                className="fixed top-[5.5rem] left-4 z-30 bg-circuits-dark-blue text-white rounded-full p-2 shadow-lg focus:outline-none"
+                onClick={() => setSidebarOpen(true)}
+                aria-label="Open sidebar"
+              >
+                <span>&#9776;</span>
+              </button>
+            )}
+            <div className="w-full max-w-2xl flex flex-col h-full">
+              <ChatHeader
+                totalTokens={totalTokens}
+                totalCost={totalCost}
+                session={session}
+                setSessionModel={async (newModel) => {
+                  setModel(newModel as ModelId);
+                  if (activeSessionId) {
+                    await setSessionModel(newModel as ModelId);
+                  }
+                }}
+              />
+              <div className="flex-1 flex flex-col overflow-hidden">
+                {sessions.length === 0 && !sessionsLoading ? (
+                  <div className="flex flex-1 flex-col items-center justify-center gap-4">
+                    <div className="text-lg text-muted-foreground">No chats yet. Start a new conversation!</div>
+                    <button
+                      className="bg-blue-600 text-white px-6 py-2 rounded-md shadow hover:bg-blue-700 transition"
+                      onClick={openNewChatModal}
+                    >
+                      Start a New Chat
+                    </button>
+                  </div>
+                ) : activeSessionId ? (
+                  <ChatInterface
+                    messages={messages}
+                    loading={chatLoading || sending}
+                    error={chatError}
+                    onSend={async ({ message }) => {
+                      if (activeSessionId) {
+                        await sendMessage({ message, session_id: activeSessionId, model });
+                        fetchSession();
+                      } else {
+                        alert("No session selected. Please select or create a chat session.");
+                      }
+                    }}
+                    activeSessionId={activeSessionId}
+                    model={model}
+                    fetchSession={fetchSession}
+                  />
+                ) : null}
+              </div>
             </div>
           </div>
         </div>

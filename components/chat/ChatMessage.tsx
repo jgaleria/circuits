@@ -18,14 +18,14 @@ export default function ChatMessage({ message }: ChatMessageProps) {
 
   return (
     <div
-      className={`flex w-full ${isUser ? "justify-end" : "justify-start"} group`}
+      className={`flex w-full ${isUser ? "justify-end" : "justify-start"} group font-sans my-2`}
       aria-live="polite"
     >
       <div
-        className={`max-w-[80%] rounded-lg px-4 py-2 shadow-md whitespace-pre-line break-words relative ${
+        className={`max-w-[80%] rounded-lg px-4 py-2 shadow-md whitespace-pre-line break-words relative border font-sans ${
           isUser
-            ? "bg-blue-600 text-white ml-auto" // user: right, blue
-            : "bg-muted text-foreground mr-auto" // assistant: left, gray
+            ? "bg-circuits-dark-blue text-white ml-auto border-circuits-dark-blue"
+            : "bg-circuits-light-grey text-circuits-dark-blue mr-auto border-circuits-light-grey"
         }`}
       >
         <div className="text-xs opacity-60 mb-1 flex items-center gap-2">
