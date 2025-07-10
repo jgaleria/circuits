@@ -1,3 +1,5 @@
+"use client";
+
 import { DeployButton } from "@/components/deploy-button";
 import { EnvVarWarning } from "@/components/env-var-warning";
 import { AuthButton } from "@/components/auth-button";
@@ -6,13 +8,14 @@ import { hasEnvVars } from "@/lib/utils";
 import Link from "next/link";
 import { MessageSquare } from "lucide-react";
 import React from "react";
+import { usePathname } from "next/navigation";
 
 interface MainLayoutProps {
   children: React.ReactNode;
 }
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
-  const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+  const pathname = usePathname();
   // If using next/navigation in app dir, use: const pathname = usePathname();
   return (
     <main className="min-h-screen flex flex-col items-center">
@@ -23,8 +26,8 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
               <Link href={"/"}>Circuits</Link>
               <Link
                 href="/agent"
-                className={`flex items-center gap-1 px-2 py-1 rounded transition-colors ${pathname.startsWith("/agent") ? "bg-blue-100 text-blue-700" : "hover:bg-muted"}`}
-                aria-current={pathname.startsWith("/agent") ? "page" : undefined}
+                className={`flex items-center gap-1 px-2 py-1 rounded transition-colors ${pathname && pathname.startsWith("/agent") ? "bg-blue-100 text-blue-700" : "hover:bg-muted"}`}
+                aria-current={pathname && pathname.startsWith("/agent") ? "page" : undefined}
               >
                 <MessageSquare size={18} className="mr-1" /> Agent
               </Link>

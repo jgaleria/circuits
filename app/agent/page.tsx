@@ -32,6 +32,10 @@ export default function AgentPage() {
     }
   }, [sessions, sessionsLoading, activeSessionId]);
 
+  useEffect(() => {
+    console.log("Active session id:", activeSessionId);
+  }, [activeSessionId]);
+
   const {
     session,
     messages,
@@ -55,8 +59,22 @@ export default function AgentPage() {
     if (!newTitle.trim()) return;
     const newSession = await addSession({ title: newTitle.trim(), model: "gpt-3.5-turbo" });
     setActiveSessionId(newSession.id);
+    await fetchSessions(); // Refresh sessions after creating a new one
     setShowModal(false);
   };
+
+  // Ensure activeSessionId is always valid (e.g., after deleting a session)
+  useEffect(() => {
+    if (!sessionsLoading && sessions.length > 0) {
+      const found = sessions.find((s) => s.id === activeSessionId);
+      if (!found) {
+        setActiveSessionId(sessions[0].id);
+      }
+    }
+    if (!sessionsLoading && sessions.length === 0) {
+      setActiveSessionId(null);
+    }
+  }, [sessions, sessionsLoading]);
 
   return (
     <MainLayout>
@@ -133,15 +151,21 @@ export default function AgentPage() {
                   loading={chatLoading || sending}
                   error={chatError}
                   onSend={async ({ message }) => {
-                    if (session) {
-                      await sendMessage({
-                        message,
-                        session_id: session.id,
-                        model: session.model,
-                      });
+                    if (activeSessionId) {
+                      // Use the model from the session list or fallback to session.model
+                      const currentSession = sessions.find(s => s.id === activeSessionId);
+                      const model = currentSession?.model || session?.model || "gpt-3.5-turbo";
+                      await sendMessage({ message, session_id: activeSessionId, model });
+                      fetchSession();
+                    } else {
+                      alert("No session selected. Please select or create a chat session.");
                     }
                   }}
-                  session={session}
+                  activeSessionId={activeSessionId}
+                  model={(() => {
+                    const currentSession = sessions.find(s => s.id === activeSessionId);
+                    return currentSession?.model || session?.model || "gpt-3.5-turbo";
+                  })()}
                   fetchSession={fetchSession}
                 />
               ) : null}

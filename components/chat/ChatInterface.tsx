@@ -8,7 +8,8 @@ interface ChatInterfaceProps {
   loading: boolean;
   error: string | null;
   onSend: (data: { message: string; session_id: string; model: string }) => Promise<void>;
-  session: ChatSessionWithMessages | null;
+  activeSessionId: string | null;
+  model: string;
   fetchSession: () => Promise<void>;
 }
 
@@ -17,7 +18,8 @@ export default function ChatInterface({
   loading,
   error,
   onSend,
-  session,
+  activeSessionId,
+  model,
   fetchSession,
 }: ChatInterfaceProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -40,9 +42,11 @@ export default function ChatInterface({
       <div className="border-t border-border p-2">
         <ChatInput
           onSend={async (message) => {
-            if (session) {
-              await onSend({ message, session_id: session.id, model: session.model });
+            if (activeSessionId) {
+              await onSend({ message, session_id: activeSessionId, model });
               fetchSession();
+            } else {
+              alert("No session selected. Please select or create a chat session.");
             }
           }}
           loading={loading}

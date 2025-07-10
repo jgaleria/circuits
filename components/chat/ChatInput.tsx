@@ -26,6 +26,7 @@ export default function ChatInput({ onSend, loading }: ChatInputProps) {
       return;
     }
     setError(null);
+    console.log("ChatInput: handleSend called with:", value); // Debug log
     await onSend(value.trim());
     setValue("");
     textareaRef.current?.focus();
