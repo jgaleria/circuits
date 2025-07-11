@@ -144,3 +144,46 @@ Circuits helps you connect your fitness journey. Built with Supabase, FastAPI, a
 - The **Next.js frontend** communicates **only** with the FastAPI backend for all authentication and data operations.
 - The **FastAPI backend** is responsible for all communication with Supabase (database and auth).
 - This separation ensures a clean, secure, and scalable architecture for future development.
+
+## Code Style & Best Practices
+
+- All components and functions are written in TypeScript with explicit types and interfaces.
+- Use React functional components and hooks. Prefer React.memo for pure presentational components.
+- Ensure all event handlers and props are explicitly typed.
+- Use semantic HTML and add ARIA attributes for accessibility.
+- Organize imports: React/Next, third-party, then local modules.
+- Use Prettier and ESLint to enforce consistent formatting and code quality.
+- Add JSDoc comments for complex functions and components.
+- Validate and sanitize all user input, especially in forms and API calls.
+- Never expose sensitive data or secrets in client-side code.
+
+## Agent Chat (AI Chatbot)
+
+The Agent chat feature allows you to interact with an AI assistant (powered by OpenAI) in a modern, ChatGPT-style interface. You can manage chat sessions, select models, and view your conversation history.
+
+### Setup Instructions
+
+1. **Obtain an OpenAI API Key**
+   - Sign up at [OpenAI](https://platform.openai.com/) and create an API key.
+
+2. **Set the API Key in Your Environment**
+   - Add your OpenAI API key to your environment variables:
+     
+     For local development, add to your `.env.local` file:
+     ```env
+     OPENAI_API_KEY=sk-...
+     ```
+     Or set it in your deployment environment (e.g., Vercel, Docker, etc).
+
+3. **Start the Application**
+   - Run the backend and frontend as described above. The Agent chat will be available at `/agent`.
+
+### Usage
+- Go to `/agent` in your browser.
+- Start a new chat or select an existing session from the sidebar.
+- Type your message and select the desired AI model.
+- The AI will respond using the model you selected.
+- All chat history is saved per session and can be managed from the sidebar.
+
+**Note:**
+- Your OpenAI API key is required for the AI assistant to function. Keep your key secure and do not expose it in client-side code or public repositories.

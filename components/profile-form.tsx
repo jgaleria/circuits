@@ -19,7 +19,7 @@ export default function ProfileForm({ initialDisplayName }: ProfileFormProps): J
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const onSubmit = async (data: ProfileUpdate) => {
+  const onSubmit = async (data: ProfileUpdate, e?: React.BaseSyntheticEvent) => {
     setSuccess(null);
     setError(null);
     if (!profile) {

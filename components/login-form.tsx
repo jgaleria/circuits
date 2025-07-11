@@ -30,7 +30,7 @@ export function LoginForm({
   const router = useRouter();
   const { reloadProfile } = useProfile();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
