@@ -76,7 +76,7 @@ export default function AgentPage() {
     if (!sessionsLoading && sessions.length === 0) {
       setActiveSessionId(null);
     }
-  }, [sessions, sessionsLoading]);
+  }, [sessions, sessionsLoading, activeSessionId]);
 
   // Keep model in sync with the current session
   useEffect(() => {

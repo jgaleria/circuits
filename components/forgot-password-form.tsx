@@ -29,7 +29,7 @@ export function ForgotPasswordForm({
     try {
       await authService.forgotPassword({ email });
       setSuccess(true);
-    } catch (error: unknown) {
+    } catch {
       // Suppress the API error and show a generic message
       setSuccess(false);
     } finally {
