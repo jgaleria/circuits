@@ -7,6 +7,6 @@ export const profileService = {
   },
 
   async updateCurrentProfile(updates: ProfileUpdate): Promise<Profile> {
-    return apiClient.put<Profile>('/api/profiles/me', updates);
+    return apiClient.put<Profile>('/api/profiles/me', updates as unknown as Record<string, unknown>);
   },
 }; 

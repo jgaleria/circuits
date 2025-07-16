@@ -64,7 +64,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
         {/* New Chat */}
         <button
           className={`flex items-center gap-2 bg-circuits-dark-blue hover:bg-circuits-medium-blue text-white font-semibold rounded-lg px-4 py-2 mt-4 mb-6 border-2 border-circuits-dark-blue shadow transition ${collapsed ? "justify-center px-2" : "w-full"}`}
-          onClick={onNewChat}
+          onClick={() => onNewChat("New Chat")}
         >
           <span className="text-lg">＋</span>
           {!collapsed && <span>New chat</span>}
@@ -117,7 +117,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
       <div
         className={`fixed inset-0 z-40 bg-black/50 transition-opacity lg:hidden ${mobileOpen ? "block" : "hidden"}`}
         onClick={() => setMobileOpen(false)}
-      />
+      ></div>
       {/* Sidebar */}
       <aside
         className={`fixed z-50 top-0 left-0 h-full bg-[#18181b] border-r border-zinc-800 flex flex-col transition-all duration-200 ${sidebarWidth} ${collapsed ? "items-center" : ""} ${mobileOpen ? "block" : "hidden"} lg:block`}
@@ -141,7 +141,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
         {/* New Chat */}
         <button
           className={`flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md px-4 py-2 mx-4 mt-8 mb-4 transition ${collapsed ? "justify-center px-2" : "w-full"}`}
-          onClick={onNewChat}
+          onClick={() => onNewChat("New Chat")}
         >
           <span className="text-lg">＋</span>
           {!collapsed && <span>New chat</span>}
@@ -203,4 +203,4 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
   );
 };
 
-export default ChatSidebar; 
+export default ChatSidebar;

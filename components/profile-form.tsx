@@ -11,7 +11,7 @@ interface ProfileFormProps {
   initialDisplayName: string;
 }
 
-export default function ProfileForm({ initialDisplayName }: ProfileFormProps): JSX.Element {
+export default function ProfileForm({ initialDisplayName }: ProfileFormProps): React.ReactElement {
   const { profile, updateProfileInContext, loading } = useProfile();
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset, setValue } = useForm<ProfileUpdate>({
     defaultValues: { display_name: initialDisplayName },

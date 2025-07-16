@@ -19,10 +19,11 @@ export default function ProtectedPage() {
 
   useEffect(() => {
     authService.getCurrentUser()
-      .then((res: { user: User }) => {
-        setUser(res.user);
+      .then((res => {
+        const typedRes = res as { user: User };
+        setUser(typedRes.user);
         setLoading(false);
-      })
+      }))
       .catch(() => {
         router.push("/auth/login");
       });

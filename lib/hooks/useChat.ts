@@ -55,7 +55,7 @@ export function useChat(sessionId: string) {
       console.log("useChat: sendMessage called with:", req); // Debug log
       // Always use the current model from session state
       const model = session?.model || req.model;
-      const res: ChatResponse = await sendMessage(sessionId, { ...req, model });
+      const res: ChatResponse = await sendMessage(sessionId, { ...req, model: model as ModelId });
       // Optimistically add user message
       setMessages((prev) => [
         ...prev,

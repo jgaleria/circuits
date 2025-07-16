@@ -25,36 +25,36 @@ export interface ResetPasswordRequest {
   new_password: string;
 }
 
+type AuthResponse = {
+  access_token?: string;
+  user?: unknown;
+};
+
 export const authService = {
   async login(credentials: LoginRequest) {
-    const response = await apiClient.post('/api/auth/login', credentials);
+    const response = await apiClient.post<AuthResponse>('/api/auth/login', credentials as unknown as Record<string, unknown>);
     // Store token for future API calls
     if (response.access_token) {
       apiClient.setToken(response.access_token);
       localStorage.setItem('user', JSON.stringify(response.user));
-      // Set cookie for middleware
-      document.cookie = `access_token=${response.access_token}; path=/; max-age=604800`;
     }
     return response;
   },
 
   async signup(userData: SignupRequest) {
-    const response = await apiClient.post('/api/auth/signup', userData);
+    const response = await apiClient.post<AuthResponse>('/api/auth/signup', userData as unknown as Record<string, unknown>);
     if (response.access_token) {
       apiClient.setToken(response.access_token);
       localStorage.setItem('user', JSON.stringify(response.user));
-      document.cookie = `access_token=${response.access_token}; path=/; max-age=604800`;
     }
     return response;
   },
 
   async logout() {
     try {
-      await apiClient.post('/api/auth/logout');
+      await apiClient.post('/api/auth/logout', undefined);
     } finally {
       apiClient.clearToken();
-      // Remove the cookie
-      document.cookie = "access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
     }
   },
 
@@ -69,14 +69,14 @@ export const authService = {
   },
 
   async updatePassword(data: PasswordUpdateRequest) {
-    return apiClient.put('/api/auth/password', data);
+    return apiClient.put('/api/auth/password', data as unknown as Record<string, unknown>);
   },
 
   async forgotPassword(data: ForgotPasswordRequest) {
-    return apiClient.post('/api/auth/forgot-password', data);
+    return apiClient.post('/api/auth/forgot-password', data as unknown as Record<string, unknown>);
   },
 
   async resetPassword(data: ResetPasswordRequest) {
-    return apiClient.post('/api/auth/reset-password', data);
+    return apiClient.post('/api/auth/reset-password', data as unknown as Record<string, unknown>);
   }
 }; 

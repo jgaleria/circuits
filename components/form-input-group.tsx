@@ -8,7 +8,7 @@ interface FormInputGroupProps extends React.ComponentPropsWithoutRef<typeof Inpu
   error?: string | null;
 }
 
-export function FormInputGroup({ label, error, id, ...props }: FormInputGroupProps): JSX.Element {
+export function FormInputGroup({ label, error, id, ...props }: FormInputGroupProps): React.ReactElement {
   return (
     <div className="grid gap-2">
       <Label htmlFor={id}>{label}</Label>
