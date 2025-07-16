@@ -37,8 +37,6 @@ export const authService = {
     if (response.access_token) {
       apiClient.setToken(response.access_token);
       localStorage.setItem('user', JSON.stringify(response.user));
-      // Set cookie for middleware
-      document.cookie = `access_token=${response.access_token}; path=/; max-age=604800`;
     }
     return response;
   },
@@ -48,7 +46,6 @@ export const authService = {
     if (response.access_token) {
       apiClient.setToken(response.access_token);
       localStorage.setItem('user', JSON.stringify(response.user));
-      document.cookie = `access_token=${response.access_token}; path=/; max-age=604800`;
     }
     return response;
   },
@@ -58,8 +55,6 @@ export const authService = {
       await apiClient.post('/api/auth/logout', undefined);
     } finally {
       apiClient.clearToken();
-      // Remove the cookie
-      document.cookie = "access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
     }
   },
 

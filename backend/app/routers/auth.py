@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, HTTPException, status, Depends, Response, Request
 from app.models.schemas import LoginRequest, SignupRequest, AuthResponse, TokenResponse, PasswordUpdateRequest, ForgotPasswordRequest, ResetPasswordRequest
 from app.services.auth_service import authenticate_user, create_user, refresh_token, update_password, forgot_password, reset_password
 from app.middleware.auth import get_current_user
@@ -7,10 +7,21 @@ from typing import Dict, Any
 router = APIRouter(prefix="/api/auth", tags=["authentication"])
 
 @router.post("/login", response_model=AuthResponse)
-async def login(login_data: LoginRequest):
+async def login(login_data: LoginRequest, request: Request, response: Response):
     """Login user with email and password"""
     try:
         auth_result = await authenticate_user(login_data)
+        # Set access_token cookie
+        secure = request.url.scheme == "https"
+        response.set_cookie(
+            key="access_token",
+            value=auth_result["access_token"],
+            httponly=True,
+            samesite="lax",
+            secure=secure,
+            path="/",
+            max_age=604800
+        )
         return AuthResponse(
             user=auth_result["user"],
             session=auth_result["session"],
@@ -29,10 +40,21 @@ async def login(login_data: LoginRequest):
         )
 
 @router.post("/signup", response_model=AuthResponse)
-async def signup(signup_data: SignupRequest):
+async def signup(signup_data: SignupRequest, request: Request, response: Response):
     """Create new user account"""
     try:
         auth_result = await create_user(signup_data)
+        # Set access_token cookie
+        secure = request.url.scheme == "https"
+        response.set_cookie(
+            key="access_token",
+            value=auth_result["access_token"] or "",
+            httponly=True,
+            samesite="lax",
+            secure=secure,
+            path="/",
+            max_age=604800
+        )
         return AuthResponse(
             user=auth_result["user"],
             session=auth_result["session"] or {},
@@ -76,8 +98,9 @@ async def get_current_user_info(current_user: dict = Depends(get_current_user)):
     }
 
 @router.post("/logout")
-async def logout():
+async def logout(response: Response):
     """Logout user (client should delete token)"""
+    response.delete_cookie(key="access_token", path="/")
     return {"message": "Logged out successfully"}
 
 @router.put("/password")
