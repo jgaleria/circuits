@@ -32,7 +32,6 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
   onNewChat,
   onDeleteSession,
   layout = "overlay",
-  sidebarOpen = true,
   setSidebarOpen,
 }) => {
   const [collapsed, setCollapsed] = useState(false);

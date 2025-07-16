@@ -20,8 +20,8 @@ export function useChatSessions() {
       // Filter duplicates by id
       const uniqueSessions = Array.from(new Map(data.map(s => [s.id, s])).values());
       setSessions(uniqueSessions);
-    } catch (err: any) {
-      setError(err.message || 'Failed to fetch sessions');
+    } catch (err: unknown) {
+      setError((err as Error).message || 'Failed to fetch sessions');
     } finally {
       setLoading(false);
     }
@@ -37,8 +37,8 @@ export function useChatSessions() {
         return [newSession, ...prev];
       });
       return newSession;
-    } catch (err: any) {
-      setError(err.message || 'Failed to create session');
+    } catch (err: unknown) {
+      setError((err as Error).message || 'Failed to create session');
       throw err;
     } finally {
       setLoading(false);
@@ -52,8 +52,8 @@ export function useChatSessions() {
       const updated = await updateChatSession(id, updates);
       setSessions((prev) => prev.map((s) => (s.id === id ? updated : s)));
       return updated;
-    } catch (err: any) {
-      setError(err.message || 'Failed to update session');
+    } catch (err: unknown) {
+      setError((err as Error).message || 'Failed to update session');
       throw err;
     } finally {
       setLoading(false);
@@ -66,8 +66,8 @@ export function useChatSessions() {
     try {
       await deleteChatSession(id);
       setSessions((prev) => prev.filter((s) => s.id !== id));
-    } catch (err: any) {
-      setError(err.message || 'Failed to delete session');
+    } catch (err: unknown) {
+      setError((err as Error).message || 'Failed to delete session');
       throw err;
     } finally {
       setLoading(false);

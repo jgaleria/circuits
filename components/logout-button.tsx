@@ -6,7 +6,6 @@ import { authService } from "@/lib/api/auth-service";
 import { useProfile } from "@/lib/contexts/profile-context";
 
 export function LogoutButton() {
-  const router = useRouter();
   const { setProfile } = useProfile();
 
   const handleLogout = async () => {

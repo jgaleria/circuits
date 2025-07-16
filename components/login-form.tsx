@@ -38,8 +38,8 @@ export function LoginForm({
       await authService.login({ email, password });
       await reloadProfile();
       router.push("/protected");
-    } catch (error: any) {
-      setError(error?.message || "Login failed");
+    } catch (error: unknown) {
+      setError((error as Error)?.message || "Login failed");
     } finally {
       setIsLoading(false);
     }

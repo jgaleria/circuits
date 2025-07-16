@@ -13,7 +13,7 @@ import {
 import { useProfile } from "@/lib/contexts/profile-context";
 
 export function AuthButton() {
-  const { profile, loading, error } = useProfile();
+  const { profile, loading } = useProfile();
 
   // Simulate user object for fallback (replace with actual user context if available)
   const userEmail = typeof window !== "undefined" ? window.localStorage.getItem("user_email") || "user@email.com" : "user@email.com";

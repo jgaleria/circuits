@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";
-import type { Profile, ProfileError, ProfileUpdate } from "@/lib/types/profile";
+import type { Profile, ProfileUpdate } from "@/lib/types/profile";
 import { profileService } from "@/lib/api/profile-service";
 
 interface ProfileContextValue {

@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { authService } from "@/lib/api/auth-service";
-import MainLayout from "@/components/main-layout";
 import { FetchDataSteps } from "@/components/tutorial/fetch-data-steps";
 import { InfoIcon } from "lucide-react";
 

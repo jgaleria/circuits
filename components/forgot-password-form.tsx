@@ -1,7 +1,6 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,7 +13,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useState } from "react";
-import { ErrorMessage } from "@/components/error-message";
 import { FormInputGroup } from "@/components/form-input-group";
 import { authService } from "@/lib/api/auth-service";
 
@@ -23,21 +21,18 @@ export function ForgotPasswordForm({
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
   const [email, setEmail] = useState("");
-  const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError(null);
 
     try {
       await authService.forgotPassword({ email });
       setSuccess(true);
     } catch (error: unknown) {
       // Suppress the API error and show a generic message
-      setError(null);
       setSuccess(false);
     } finally {
       setIsLoading(false);

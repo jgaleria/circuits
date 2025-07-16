@@ -1,6 +1,5 @@
 import MainLayout from "@/components/main-layout";
 import { UpdatePasswordForm } from "@/components/update-password-form";
-import { useSearchParams } from "next/navigation";
 
 export default function Page() {
   const searchParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;

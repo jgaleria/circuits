@@ -4,7 +4,6 @@ import { useChatSessions } from "../../lib/hooks/useChatSessions";
 import { useChat } from "../../lib/hooks/useChat";
 import ChatInterface from "../../components/chat/ChatInterface";
 import ChatHeader from "../../components/chat/ChatHeader";
-import ModelSelector from "../../components/chat/ModelSelector";
 import MainLayout from "../../components/main-layout";
 import ChatSidebar from "../../components/chat/ChatSidebar";
 import { AVAILABLE_MODELS, ModelId } from "../../lib/types/chat";
@@ -33,7 +32,7 @@ export default function AgentPage() {
     if (!sessionsLoading && sessions.length > 0 && !activeSessionId) {
       setActiveSessionId(sessions[0].id);
     }
-  }, [sessions, sessionsLoading, activeSessionId]);
+  }, [sessions, sessionsLoading]);
 
   useEffect(() => {
     console.log("Active session id:", activeSessionId);

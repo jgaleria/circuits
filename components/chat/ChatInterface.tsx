@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import ChatMessage from "./ChatMessage";
 import ChatInput from "./ChatInput";
-import { ChatMessage as ChatMessageType, ChatSessionWithMessages } from "../../lib/types/chat";
+import { ChatMessage as ChatMessageType } from "../../lib/types/chat";
 
 /**
  * ChatInterface displays the chat messages and input area for a chat session.
