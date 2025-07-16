@@ -32,7 +32,7 @@ export default function AgentPage() {
     if (!sessionsLoading && sessions.length > 0 && !activeSessionId) {
       setActiveSessionId(sessions[0].id);
     }
-  }, [sessions, sessionsLoading]);
+  }, [sessions, sessionsLoading, activeSessionId]);
 
   useEffect(() => {
     console.log("Active session id:", activeSessionId);
