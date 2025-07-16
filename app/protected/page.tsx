@@ -19,7 +19,7 @@ export default function ProtectedPage() {
 
   useEffect(() => {
     authService.getCurrentUser()
-      .then((res) => {
+      .then((res: { user: User }) => {
         setUser(res.user);
         setLoading(false);
       })
