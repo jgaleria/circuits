@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, type ReactElement } from "react";
 
-export default function GlobalError({ error, reset }: { error: Error; reset: () => void }): JSX.Element {
+export default function GlobalError({ error, reset }: { error: Error; reset: () => void }): ReactElement {
   useEffect(() => {
     // Optionally log error to an error reporting service
     // console.error(error);
